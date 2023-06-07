@@ -48,11 +48,12 @@ run `make test`.
   Rails project conventions. likewise, I chose to use a library to
   help me integrate React into this project. working with these
   conventions rather than against them let me focus on what the app
-  does and how it does it.
-  
-* the `Answer` module which does the heavy lifting of querying OpenAI
-  is not a class. I don't think that there'd be anything to gain by
-  defining a constructor, getters and setters; the module and
+  does and how it does it. I chose PostgreSQL because it too is a
+  sensible default that's well supported by Rails and Heroku.
+
+* the `Answer` module, which does the heavy lifting of querying
+  OpenAI, is not a class. I don't think that there'd be anything to
+  gain by defining a constructor, getters and setters; the module and
   functions provide sufficient organization. within it, I chose to
   make the network requests more visible, at the top-level
   `answer_question` function. the idea is to lay out the function like
@@ -72,8 +73,22 @@ run `make test`.
   out. `QuestionsController#create` could be made smaller still, but I
   think it reads well enough as is.
   
-* the `Question` class does nothing. I'd rather keep business logic
-  out of Rails objects.
+* the `Question` class does nothing other than what ActiveModel
+  provides. I'd rather keep business logic out of Rails objects. 
+  
+* the Ruby side of the project closely follows the model of the Python
+  code. it was straightforward to port the business logic of the
+  Python to Ruby basically line for line. Django and Rails parallel
+  each other, but hardly in a line-for-line way.
+  
+  the HTML is meant to very closely approximate the source HTML. the
+  main benefit of it this is that it allowed me to copy the CSS
+  verbatim and use all of that styling for free.
+  
+  the JavaScript side does lean on the source code, but my approach
+  wasn't to try to port it line-by-line. I let React, and my knowledge
+  of the desired behavior, guide my work, rather than focus on porting
+  the source JS bit by bit.
 
 ## things learned
 
@@ -85,9 +100,10 @@ point of view on OpenAI.
 
 it was strange to discover that OpenAI's "Pride and Prejudice" answers
 were too good, and to then consider why that might be. because OpenAI
-is a black box full of information, it seems hard to gauge how good my
-completion prompt is. I can imagine giving OpenAI a totally useless
-prompt which it basically ignores in favor of what it already knows.
+is a black box full of information, it seemed (and still seems) hard
+to gauge how good my completion prompt is. I can imagine giving OpenAI
+a totally useless prompt which it could totally ignore in favor of
+what it already knows.
 
 because it's hard to gauge the efficacy of a prompt and context when
 OpenAI might just know too much about the topic, it might be
@@ -101,10 +117,20 @@ expressed with obscure content that OpenAI hasn't been trained on.
 
 ## things I would do different next time around
 
-* I'd love to write it in Clojure.
-* there are a number of finer points of React components that I'd like
-  to explore more deeply. for example, I feel that my use of the
-  `questionIdRef` is hacky, as are my nested `showAnswer` callbacks.
+I'd definitely push more on my React skills. there are a number of
+finer points of React components that I'd like to explore more
+deeply. for example, I feel that my use of the `questionIdRef` is
+hacky, as are my recursive `showAnswer` calls - they seem like they
+might not be idiomatic React. my JS and CSS isn't processed beyond the
+defaults of the libraries I used - they could certainly be minified,
+at least. I would be interested to try `react_on_rails` and see how it
+compares to `react-rails`.
+
+I would try write the Ruby port of the Python code to be less of a
+line-for-line port. doing it line-for-line was a pragmatic choice that
+helped me to implement the code and learn about it at the same time. I
+think that the code could be pared down more to its essence by not
+feeling obligated to port it line-for-line.
 
 [challenge-docs]: https://gumroad.notion.site/Product-engineering-challenge-f7aa85150edd41eeb3537aae4632619f
 [askmybook]: https://github.com/slavingia/askmybook
