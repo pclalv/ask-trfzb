@@ -3,6 +3,8 @@
 a [Gumroad product engineering challenge][challenge-docs] project
 which ports [askmybook][askmybook] to Ruby and swaps out the book.
 
+![the app being asked a question and responding with an aswer](action.gif)
+
 # running this locally
 
 run `make run`.
